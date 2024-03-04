@@ -1,4 +1,7 @@
 package com.example.jetpackcomposehiltroominmvvm.viewmodel
 
-class NoteScreen {
+sealed class NoteScreen {
+    object NotesList : NoteScreen()
+    data class NoteDetail(val noteId: Long) : NoteScreen()
+    object NoteEntry : NoteScreen()
 }
