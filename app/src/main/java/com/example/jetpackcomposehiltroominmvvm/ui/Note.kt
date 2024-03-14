@@ -1,15 +1,24 @@
 package com.example.jetpackcomposehiltroominmvvm.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
@@ -21,8 +30,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.jetpackcomposehiltroominmvvm.room.NoteModel
 import com.example.jetpackcomposehiltroominmvvm.viewmodel.NoteScreen
 import com.example.jetpackcomposehiltroominmvvm.viewmodel.NoteViewModel
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
-    @Composable
+@Composable
     fun NoteApp() {
         val noteViewModel: NoteViewModel = viewModel()
         val notes by noteViewModel.allNotes.observeAsState(initial = emptyList())
@@ -94,6 +107,49 @@ fun ListOfNote(
             )
         }
     }
+}
+
+
+@Composable
+fun ItemOfNote(note: NoteModel, onNoteDelete: () -> Unit, onNoteClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(5.dp)
+            .clickable { onNoteClick.invoke() },
+
+        ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = note.text, modifier = Modifier.weight(1f), color = Color.Black)
+            IconButton(
+                onClick = {
+                    onNoteDelete.invoke()
+                },
+                modifier = Modifier
+                    .size(24.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Delete",
+                    tint = Color.Blue
+                )
+            }
+        }
+
+        val dateformat = dateFormat(note.timestamp)
+        Text(text = "Date: $dateformat", color = Color.Gray, modifier = Modifier.padding(5.dp))
+    }
+}
+
+private fun dateFormat(time: Long): String {
+    val formatDate = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+    val localDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault())
+    return formatDate.format(localDate)
 }
 
 
