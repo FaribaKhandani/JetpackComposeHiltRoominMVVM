@@ -216,6 +216,60 @@ fun DetailOfNote(
     }
 }
 
+@Composable
+fun NewNote(
+    onSaveNote: (NoteModel) -> Unit,
+    onBack: () -> Unit
+) {
+    var noteText by remember { mutableStateOf("") }
+
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+
+            IconButton(
+                onClick = onBack,
+                modifier = Modifier.size(48.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back",
+                    tint = Color.Blue
+                )
+            }
+
+            IconButton(
+                onClick = {
+                    val newNote = NoteModel(text = noteText)
+                    onSaveNote(newNote)
+                }
+            ) {
+                Text("Done", color = Color.Blue)
+            }
+        }
+
+        TextField(
+            value = noteText,
+            onValueChange = { noteText = it },
+            label = { Text("Title :", color = Color.Blue) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(8.dp))
+    }
+}
+
+
 
 private fun dateFormat(time: Long): String {
     val formatDate = DateTimeFormatter.ofPattern("dd/MM/yyyy")

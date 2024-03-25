@@ -1,10 +1,11 @@
 package com.example.jetpackcomposehiltroominmvvm.ui
 
-import androidx.appcompat.app.AppCompatActivity
+
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Note
 import androidx.activity.compose.setContent
-import com.example.jetpackcomposehiltroominmvvm.NoteApp
-import com.example.jetpackcomposehiltroominmvvm.R
+import androidx.appcompat.app.AppCompatActivity
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
